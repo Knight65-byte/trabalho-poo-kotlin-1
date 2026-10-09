@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>Main.kt</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style type="text/css">
+.s0 { color: #7a7e85;}
+.s1 { color: #bcbec4;}
+.s2 { color: #cf8e6d;}
+.s3 { color: #bcbec4;}
+.s4 { color: #2aacb8;}
+.s5 { color: #6aab73;}
+</style>
+</head>
+<body bgcolor="#191a1c">
+<table CELLSPACING=0 CELLPADDING=5 COLS=1 WIDTH="100%" BGCOLOR="#606060" >
+<tr><td><center>
+<font face="Arial, Helvetica" color="#000000">
+Main.kt</font>
+</center></td></tr></table>
+<pre><span class="s0">// 1. Classes de Domínio (POO e Tipos de Dados)</span>
+
+<span class="s2">class </span><span class="s1">Morador</span><span class="s3">(</span>
+    <span class="s2">val </span><span class="s1">nome: String</span><span class="s3">,</span>
+    <span class="s2">val </span><span class="s1">telefone: String</span>
+<span class="s3">)</span>
+
+<span class="s2">class </span><span class="s1">TaxaCondominio</span><span class="s3">(</span>
+    <span class="s2">val </span><span class="s1">descricao: String</span><span class="s3">,</span>
+    <span class="s2">val </span><span class="s1">valor: Double</span>
+<span class="s3">)</span>
+
+<span class="s2">class </span><span class="s1">Unidade</span><span class="s3">(</span>
+    <span class="s2">val </span><span class="s1">bloco: String</span><span class="s3">,</span>
+    <span class="s2">val </span><span class="s1">numero: Int</span><span class="s3">,</span>
+    <span class="s2">val </span><span class="s1">morador: Morador</span><span class="s3">,</span>
+    <span class="s2">val </span><span class="s1">statusCodigo: Int</span><span class="s3">, </span><span class="s0">// 1: Adimplente, 2: Inadimplente, 3: Em Acordo Judicial</span>
+    <span class="s2">val </span><span class="s1">observacaoEncomenda: String? </span><span class="s3">= </span><span class="s2">null </span><span class="s0">// Null Safety</span>
+<span class="s3">) {</span>
+
+    <span class="s0">// Função para avaliar o status da unidade usando 'when'</span>
+    <span class="s2">fun </span><span class="s1">obterStatusDescricao</span><span class="s3">()</span><span class="s1">: String </span><span class="s3">{</span>
+        <span class="s2">return when </span><span class="s3">(</span><span class="s1">statusCodigo</span><span class="s3">) {</span>
+            <span class="s4">1 </span><span class="s3">-&gt; </span><span class="s5">&quot;Adimplente&quot;</span>
+            <span class="s4">2 </span><span class="s3">-&gt; </span><span class="s5">&quot;Inadimplente&quot;</span>
+            <span class="s4">3 </span><span class="s3">-&gt; </span><span class="s5">&quot;Em Acordo Judicial&quot;</span>
+            <span class="s2">else </span><span class="s3">-&gt; </span><span class="s5">&quot;Status Desconhecido&quot;</span>
+        <span class="s3">}</span>
+    <span class="s3">}</span>
+
+    <span class="s0">// Função para verificar encomenda utilizando o operador Elvis (?:)</span>
+    <span class="s2">fun </span><span class="s1">obterObservacaoEncomenda</span><span class="s3">()</span><span class="s1">: String </span><span class="s3">{</span>
+        <span class="s2">return </span><span class="s1">observacaoEncomenda ?: </span><span class="s5">&quot;Nenhuma encomenda pendente&quot;</span>
+    <span class="s3">}</span>
+
+    <span class="s0">// Função para calcular o total do boleto usando 'for' e aplicando multa com 'if/else'</span>
+    <span class="s2">fun </span><span class="s1">calcularBoletoTotal</span><span class="s3">(</span><span class="s1">taxas: List</span><span class="s3">&lt;</span><span class="s1">TaxaCondominio</span><span class="s3">&gt;, </span><span class="s1">atrasado: Boolean</span><span class="s3">)</span><span class="s1">: Double </span><span class="s3">{</span>
+        <span class="s2">var </span><span class="s1">subtotal </span><span class="s3">= </span><span class="s4">0.0</span>
+
+        <span class="s0">// Laço 'for' para somar todas as taxas e despesas mensais</span>
+        <span class="s2">for </span><span class="s3">(</span><span class="s1">taxa </span><span class="s2">in </span><span class="s1">taxas</span><span class="s3">) {</span>
+            <span class="s1">subtotal </span><span class="s3">+= </span><span class="s1">taxa</span><span class="s3">.</span><span class="s1">valor</span>
+        <span class="s3">}</span>
+
+        <span class="s0">// Condicional 'if/else' para aplicação de multa por atraso (2%)</span>
+        <span class="s2">val </span><span class="s1">valorFinal </span><span class="s3">= </span><span class="s2">if </span><span class="s3">(</span><span class="s1">atrasado</span><span class="s3">) {</span>
+            <span class="s2">val </span><span class="s1">multa </span><span class="s3">= </span><span class="s1">subtotal </span><span class="s3">* </span><span class="s4">0.02</span>
+            <span class="s1">subtotal </span><span class="s3">+ </span><span class="s1">multa</span>
+        <span class="s3">} </span><span class="s2">else </span><span class="s3">{</span>
+            <span class="s1">subtotal</span>
+        <span class="s3">}</span>
+
+        <span class="s2">return </span><span class="s1">valorFinal</span>
+    <span class="s3">}</span>
+<span class="s3">}</span>
+
+<span class="s0">// 2. Execução Principal (Demonstração do Sistema)</span>
+
+<span class="s2">fun </span><span class="s1">main</span><span class="s3">() {</span>
+    <span class="s0">// Instanciando Morador e Unidade</span>
+    <span class="s2">val </span><span class="s1">morador1 </span><span class="s3">= </span><span class="s1">Morador</span><span class="s3">(</span><span class="s1">nome </span><span class="s3">= </span><span class="s5">&quot;Carlos Andrade&quot;</span><span class="s3">, </span><span class="s1">telefone </span><span class="s3">= </span><span class="s5">&quot;(92) 99123-4567&quot;</span><span class="s3">)</span>
+
+    <span class="s0">// Teste 1: Morador com encomenda pendente e pagamento em dia</span>
+    <span class="s2">val </span><span class="s1">unidade101 </span><span class="s3">= </span><span class="s1">Unidade</span><span class="s3">(</span>
+        <span class="s1">bloco </span><span class="s3">= </span><span class="s5">&quot;A&quot;</span><span class="s3">,</span>
+        <span class="s1">numero </span><span class="s3">= </span><span class="s4">101</span><span class="s3">,</span>
+        <span class="s1">morador </span><span class="s3">= </span><span class="s1">morador1</span><span class="s3">,</span>
+        <span class="s1">statusCodigo </span><span class="s3">= </span><span class="s4">1</span><span class="s3">,</span>
+        <span class="s1">observacaoEncomenda </span><span class="s3">= </span><span class="s5">&quot;Caixa media na portaria - Mercado Livre&quot;</span>
+    <span class="s3">)</span>
+
+    <span class="s0">// Lista de taxas do mês</span>
+    <span class="s2">val </span><span class="s1">taxasMes </span><span class="s3">= </span><span class="s1">listOf</span><span class="s3">(</span>
+        <span class="s1">TaxaCondominio</span><span class="s3">(</span><span class="s5">&quot;Taxa de Condomínio Padrão&quot;</span><span class="s3">, </span><span class="s4">450.00</span><span class="s3">),</span>
+        <span class="s1">TaxaCondominio</span><span class="s3">(</span><span class="s5">&quot;Fundo de Reserva&quot;</span><span class="s3">, </span><span class="s4">45.00</span><span class="s3">),</span>
+        <span class="s1">TaxaCondominio</span><span class="s3">(</span><span class="s5">&quot;Manutenção do Elevador&quot;</span><span class="s3">, </span><span class="s4">30.00</span><span class="s3">)</span>
+    <span class="s3">)</span>
+
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;=== SISTEMA DE GESTÃO DE CONDOMÍNIO ===&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Unidade: Bloco </span><span class="s2">${</span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">bloco</span><span class="s2">} </span><span class="s5">- Apto </span><span class="s2">${</span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">numero</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Morador: </span><span class="s2">${</span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">morador</span><span class="s3">.</span><span class="s1">nome</span><span class="s2">} </span><span class="s5">| Tel: </span><span class="s2">${</span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">morador</span><span class="s3">.</span><span class="s1">telefone</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Status da Unidade: </span><span class="s2">${</span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">obterStatusDescricao</span><span class="s3">()</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Encomendas: </span><span class="s2">${</span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">obterObservacaoEncomenda</span><span class="s3">()</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;----------------------------------------&quot;</span><span class="s3">)</span>
+
+    <span class="s0">// Cálculo do Boleto (Sem Atraso)</span>
+    <span class="s2">val </span><span class="s1">totalEmDia </span><span class="s3">= </span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">calcularBoletoTotal</span><span class="s3">(</span><span class="s1">taxasMes</span><span class="s3">, </span><span class="s1">atrasado </span><span class="s3">= </span><span class="s2">false</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Total do Boleto (Pago no prazo): R$ </span><span class="s2">${</span><span class="s5">&quot;%.2f&quot;</span><span class="s3">.</span><span class="s1">format</span><span class="s3">(</span><span class="s1">totalEmDia</span><span class="s3">)</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+
+    <span class="s0">// Cálculo do Boleto (Com Atraso - Aplicação de Multa)</span>
+    <span class="s2">val </span><span class="s1">totalComAtraso </span><span class="s3">= </span><span class="s1">unidade101</span><span class="s3">.</span><span class="s1">calcularBoletoTotal</span><span class="s3">(</span><span class="s1">taxasMes</span><span class="s3">, </span><span class="s1">atrasado </span><span class="s3">= </span><span class="s2">true</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Total do Boleto (Com atraso +2% multa): R$ </span><span class="s2">${</span><span class="s5">&quot;%.2f&quot;</span><span class="s3">.</span><span class="s1">format</span><span class="s3">(</span><span class="s1">totalComAtraso</span><span class="s3">)</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;</span><span class="s2">\n</span><span class="s5">----------------------------------------&quot;</span><span class="s3">)</span>
+
+    <span class="s0">// Teste 2: Morador sem encomenda (String? = null) e Inadimplente</span>
+    <span class="s2">val </span><span class="s1">morador2 </span><span class="s3">= </span><span class="s1">Morador</span><span class="s3">(</span><span class="s1">nome </span><span class="s3">= </span><span class="s5">&quot;Ana Souza&quot;</span><span class="s3">, </span><span class="s1">telefone </span><span class="s3">= </span><span class="s5">&quot;(92) 98877-6655&quot;</span><span class="s3">)</span>
+    <span class="s2">val </span><span class="s1">unidade202 </span><span class="s3">= </span><span class="s1">Unidade</span><span class="s3">(</span>
+        <span class="s1">bloco </span><span class="s3">= </span><span class="s5">&quot;B&quot;</span><span class="s3">,</span>
+        <span class="s1">numero </span><span class="s3">= </span><span class="s4">202</span><span class="s3">,</span>
+        <span class="s1">morador </span><span class="s3">= </span><span class="s1">morador2</span><span class="s3">,</span>
+        <span class="s1">statusCodigo </span><span class="s3">= </span><span class="s4">2</span><span class="s3">,</span>
+        <span class="s1">observacaoEncomenda </span><span class="s3">= </span><span class="s2">null </span><span class="s0">// Forçando valor nulo para testar o operador Elvis</span>
+    <span class="s3">)</span>
+
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Unidade: Bloco </span><span class="s2">${</span><span class="s1">unidade202</span><span class="s3">.</span><span class="s1">bloco</span><span class="s2">} </span><span class="s5">- Apto </span><span class="s2">${</span><span class="s1">unidade202</span><span class="s3">.</span><span class="s1">numero</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Morador: </span><span class="s2">${</span><span class="s1">unidade202</span><span class="s3">.</span><span class="s1">morador</span><span class="s3">.</span><span class="s1">nome</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Status da Unidade: </span><span class="s2">${</span><span class="s1">unidade202</span><span class="s3">.</span><span class="s1">obterStatusDescricao</span><span class="s3">()</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">)</span>
+    <span class="s1">println</span><span class="s3">(</span><span class="s5">&quot;Encomendas: </span><span class="s2">${</span><span class="s1">unidade202</span><span class="s3">.</span><span class="s1">obterObservacaoEncomenda</span><span class="s3">()</span><span class="s2">}</span><span class="s5">&quot;</span><span class="s3">) </span><span class="s0">// Retornará a mensagem padrão</span>
+<span class="s3">}</span></pre>
+</body>
+</html>
